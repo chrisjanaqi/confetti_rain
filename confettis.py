@@ -73,7 +73,7 @@ def input_param():
         - density
         - color to use
     """
-    return Param(640, 480, 1, .25)
+    return Param(640, 480, 10, .25)
 
 
 def generate_confetti(confettis, param):
@@ -102,11 +102,13 @@ def draw_image(conffetis, param, index):
     """
     Draw into an svg image the confetti vector
     """
-    with open('frame_{}.svg'.format(index), 'w') as frame:
-        print('<svg width={} height={}>'.format(param.width, param.height),
+    with open('frames/frame_{}.svg'.format(index), 'w') as frame:
+        print('<svg width="{}" height="{}">'.format(param.width, param.height),
               file=frame)
-        for confetti in range(conffetis):
-            print('<circle/>', file=frame)
+        for confetti in conffetis:
+            print('<circle cx="{}" cy="{}" r="{}" fill="{}"/>'
+                    .format(confetti.x, confetti.y, confetti.radius, confetti.color), 
+                  file=frame)
         print('</svg>', file=frame)
 
 def main():
