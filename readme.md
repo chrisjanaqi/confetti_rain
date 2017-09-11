@@ -8,4 +8,4 @@ The goal of this project is to make an animation (generation of multiple svg fra
 
 ## Installation
 
-simply run `conffetis.py` to generate your files on the current directory
+simply run `./conffetis.py` to generate your files on the current directory
