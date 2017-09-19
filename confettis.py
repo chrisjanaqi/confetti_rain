@@ -47,7 +47,7 @@ class Param:
         - height (int) : height of the animation (in pixels)
         - nb_frames (int) : number of frame
         - density (float) : density of the rain with
-                            (density == nb_confetti / width)
+                            (density == r * nb_confetti / width)
                             with r the radius of one confetti.
                             Indicates how much confetti we should generate per
                             frame
@@ -73,7 +73,17 @@ def input_param():
         - density
         - color to use
     """
-    return Param(640, 480, 10, .25)
+    print("/!\\ WARNING /!\\")
+    print("The previous animation WILL be deleted")
+    process = input("Continue (y/n)? ") == 'y'
+    if process:
+        width = int(input('width ? '))
+        height = int(input('height ? '))
+        nb_frames = int(input('number of frames ? '))
+        density = float(input('density of the generation (float in [0,1]) ? '))
+        return Param(width, height, nb_frames, density)
+    else :
+        return None
 
 
 def generate_confetti(confettis, param):
@@ -95,6 +105,7 @@ def simulate_fall(confettis, param):
     """
     for confetti in confettis:
         confetti.y += 4
+        confetti.x += randint(-2,2)
         if confetti.y >= param.height + confetti.radius:
             confettis.pop(confettis.index(confetti))
 
@@ -107,7 +118,7 @@ def draw_image(conffetis, param, index):
               file=frame)
         for confetti in conffetis:
             print('<circle cx="{}" cy="{}" r="{}" fill="{}"/>'
-                    .format(confetti.x, confetti.y, confetti.radius, confetti.color), 
+                    .format(confetti.x, confetti.y, confetti.radius, confetti.color),
                   file=frame)
         print('</svg>', file=frame)
 
@@ -117,11 +128,11 @@ def main():
     """
     param = input_param()
     conffetis = []
-
-    for i in range(param.nb_frames):
-        conffetis = generate_confetti(conffetis, param)
-        simulate_fall(conffetis, param)
-        draw_image(conffetis, param, i)
+    if param is not None:
+        for i in range(param.nb_frames):
+            conffetis = generate_confetti(conffetis, param)
+            simulate_fall(conffetis, param)
+            draw_image(conffetis, param, i)
 
     print("main here")
 
